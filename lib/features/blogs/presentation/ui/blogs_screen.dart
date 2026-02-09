@@ -1,3 +1,4 @@
+import 'package:blog_bloc/features/blogs/presentation/ui/blog_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/blog_bloc.dart';
@@ -141,6 +142,14 @@ class _BlogsScreenState extends State<BlogsScreen> {
               if (index < blogs.length) {
                 final blog = blogs[index];
                 return ListTile(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => BlogDetailsScreen(blogDetails: blog),
+                      ),
+                    );
+                  },
                   title: Text(blog.title),
                   subtitle: Text(
                     blog.content,

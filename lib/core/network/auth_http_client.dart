@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:blog_bloc/core/constants.dart';
 import 'package:http/http.dart' as http;
 import '../../features/auth/data/dto/api_exception.dart';
 
 class AuthHttpClient {
   final http.Client _client = http.Client();
-  final String baseUrl = 'http://192.168.0.116:3000';
+  final String baseUrl = AppConstants.baseUrl;
 
   AuthHttpClient();
 
@@ -76,7 +77,7 @@ class AuthHttpClient {
     Map<String, dynamic> data;
     try {
       data = jsonDecode(res.body);
-    } catch (_) { 
+    } catch (_) {
       data = {};
     }
 
