@@ -1,12 +1,10 @@
 // features/blogs/presentation/screens/blogs_screen.dart
-import 'dart:io';
+import 'package:blog_bloc/features/blogs/presentation/ui/widgets/create_blog_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import '../bloc/blog_bloc.dart';
 import '../bloc/blog_event.dart';
 import '../bloc/blog_state.dart';
-import '../../data/dto/blog_dto.dart';
 
 class BlogsScreen extends StatefulWidget {
   const BlogsScreen({super.key});
@@ -47,90 +45,11 @@ class _BlogsScreenState extends State<BlogsScreen> {
   }
 
   void _openCreateBlogModal() {
-    final titleCtrl = TextEditingController();
-    final contentCtrl = TextEditingController();
-    File? pickedImage;
-
-    final blogBloc = context.read<BlogBloc>(); // 👈 parent context
-
+    final blogBloc = context.read<BlogBloc>();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (_) => Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-          left: 16,
-          right: 16,
-          top: 16,
-        ),
-        child: StatefulBuilder(
-          builder: (modalContext, setState) {
-
-            return SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextField(
-                    controller: titleCtrl,
-                    decoration: const InputDecoration(labelText: 'Title'),
-                  ),
-                  TextField(
-                    controller: contentCtrl,
-                    decoration: const InputDecoration(labelText: 'Content'),
-                    maxLines: 3,
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: () async {
-                          final picker = ImagePicker();
-                          final image = await picker.pickImage(
-                            source: ImageSource.gallery,
-                          );
-                          if (image != null) {
-                            setState(() {
-                              pickedImage = File(image.path);
-                            });
-                          }
-                        },
-                        icon: const Icon(Icons.image),
-                        label: const Text('Pick Image'),
-                      ),
-                      const SizedBox(width: 8),
-                      if (pickedImage != null)
-                        Expanded(
-                          child: Text(
-                            pickedImage!.path.split('/').last,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () async {
-                            final dto = CreateBlogDto(
-                              title: titleCtrl.text,
-                              content: contentCtrl.text,
-                              image: pickedImage,
-                            );
-
-                            // Add event
-                            blogBloc.add(CreateBlog(dto: dto));
-
-                            // Close modal
-                            Navigator.pop(context);
-                          },
-                    child: const Text('Create Blog'),
-                  ),
-                  const SizedBox(height: 16),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
+      builder: (_) => CreateBlogModal(blogBloc: blogBloc,),
     );
   }
 

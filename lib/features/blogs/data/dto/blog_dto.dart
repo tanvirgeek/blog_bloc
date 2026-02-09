@@ -1,6 +1,8 @@
 // features/blog/data/dto/blog_dto.dart
 import 'dart:io';
 
+import 'package:equatable/equatable.dart';
+
 class BlogDto {
   final String id;
   final String title;
@@ -56,21 +58,20 @@ class PaginatedBlogsDto {
   }
 }
 
-
-class CreateBlogDto {
+class CreateBlogDto extends Equatable {
   final String title;
   final String content;
   final File? image;
 
-  CreateBlogDto({
-    required this.title,
-    required this.content,
-    this.image,
-  });
+  const CreateBlogDto({required this.title, required this.content, this.image});
 
-  // For API call, we'll handle multipart in the repository, so we don't convert image to JSON here
-  Map<String, dynamic> toJson() => {
-        'title': title,
-        'content': content,
-      };
+  /// Only text fields go to JSON
+  Map<String, dynamic> toJson() => {'title': title, 'content': content};
+
+  @override
+  List<Object?> get props => [
+    title,
+    content,
+    image?.path, // ⚠️ important: compare by path, not File reference
+  ];
 }
