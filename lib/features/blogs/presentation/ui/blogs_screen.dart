@@ -1,10 +1,9 @@
-// features/blogs/presentation/screens/blogs_screen.dart
-import 'package:blog_bloc/features/blogs/presentation/ui/widgets/create_blog_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/blog_bloc.dart';
 import '../bloc/blog_event.dart';
 import '../bloc/blog_state.dart';
+import '../ui/widgets/create_blog_modal.dart';
 
 class BlogsScreen extends StatefulWidget {
   const BlogsScreen({super.key});
@@ -49,7 +48,7 @@ class _BlogsScreenState extends State<BlogsScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (_) => CreateBlogModal(blogBloc: blogBloc,),
+      builder: (_) => CreateBlogModal(blogBloc: blogBloc),
     );
   }
 
@@ -68,16 +67,18 @@ class _BlogsScreenState extends State<BlogsScreen> {
       body: BlocConsumer<BlogBloc, BlogState>(
         listener: (context, state) {
           if (state is BlogLoaded) _isFetching = false;
+
           if (state is BlogError) {
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(SnackBar(content: Text(state.message)));
           }
+
           if (state is BlogSuccessFullyCreated) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Blog created successfully')),
             );
-            // Optionally refresh blogs
+            // Refresh blogs
             _page = 1;
             context.read<BlogBloc>().add(
               FetchBlogs(page: _page, limit: _limit),
@@ -85,10 +86,6 @@ class _BlogsScreenState extends State<BlogsScreen> {
           }
         },
         builder: (context, state) {
-          if (state is BlogLoading && state.isFirstFetch) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
           List blogs = [];
           bool isLoadingMore = false;
 
@@ -99,8 +96,14 @@ class _BlogsScreenState extends State<BlogsScreen> {
             blogs = state.blogs;
           }
 
+          // Full screen loader on first fetch
+          if (state is BlogLoading && state.isFirstFetch) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
           return ListView.builder(
             controller: _scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
             itemCount: blogs.length + (isLoadingMore ? 1 : 0),
             itemBuilder: (context, index) {
               if (index < blogs.length) {
