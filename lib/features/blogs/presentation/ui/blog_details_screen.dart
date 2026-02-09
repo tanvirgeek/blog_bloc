@@ -26,7 +26,7 @@ class BlogDetailsScreen extends StatelessWidget {
                     if (loadingProgress == null) return child;
                     return const Center(child: CircularProgressIndicator());
                   },
-                  errorBuilder: (_, __, ___) => Container(
+                  errorBuilder: (_, _, _) => Container(
                     color: Colors.grey.shade200,
                     child: const Icon(Icons.broken_image, size: 40),
                   ),

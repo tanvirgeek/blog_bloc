@@ -8,7 +8,7 @@ import 'package:blog_bloc/features/auth/presentation/ui/widgets/auth_text_field.
 import 'package:blog_bloc/features/blogs/data/api/blog_api.dart';
 import 'package:blog_bloc/features/blogs/data/repository/blog_repository.dart';
 import 'package:blog_bloc/features/blogs/presentation/bloc/blog_bloc.dart';
-import 'package:blog_bloc/features/blogs/presentation/ui/blogs_screen.dart';
+import 'package:blog_bloc/features/blogs/presentation/ui/main_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
             MaterialPageRoute(
               builder: (_) => BlocProvider(
                 create: (_) => BlogBloc(blogRepo),
-                child: const BlogsScreen(),
+                child: const MainShell(),
               ),
             ),
           );
