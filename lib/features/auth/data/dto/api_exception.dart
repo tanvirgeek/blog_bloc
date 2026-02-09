@@ -1,0 +1,10 @@
+// features/auth/data/dto/api_exception.dart
+class ApiException implements Exception {
+  final String message;
+  final int statusCode;
+
+  ApiException(this.message, this.statusCode);
+
+  @override
+  String toString() => message; // just the message for UI
+}
