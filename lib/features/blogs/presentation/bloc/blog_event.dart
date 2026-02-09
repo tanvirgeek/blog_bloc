@@ -1,4 +1,5 @@
 // features/blogs/presentation/bloc/blog_event.dart
+import 'package:blog_bloc/features/blogs/data/dto/blog_dto.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class BlogEvent extends Equatable {
@@ -16,4 +17,13 @@ class FetchBlogs extends BlogEvent {
 
   @override
   List<Object?> get props => [page, limit];
+}
+
+class CreateBlog extends BlogEvent {
+  final CreateBlogDto dto;
+
+  const CreateBlog({required this.dto});
+
+  @override
+  List<Object?> get props => [dto];
 }

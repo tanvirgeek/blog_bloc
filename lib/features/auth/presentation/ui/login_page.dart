@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthAuthenticated) {
-          final authHttpClient = AuthHttpClient('http://localhost:3000');
+          final authHttpClient = AuthHttpClient();
           final blogAPI = BlogApi(authHttpClient);
           final blogRepo = BlogRepository(
             blogAPI,

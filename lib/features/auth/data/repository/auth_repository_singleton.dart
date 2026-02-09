@@ -13,7 +13,7 @@ class AuthRepositorySingleton {
   factory AuthRepositorySingleton() => _instance;
 
   AuthRepositorySingleton._internal() {
-    final authHttpClient = AuthHttpClient('http://localhost:3000');
+    final authHttpClient = AuthHttpClient();
     final authApi = AuthApi(authHttpClient);
     final tokenStorage = TokenStorage();
     repository = AuthRepository(authApi, tokenStorage);

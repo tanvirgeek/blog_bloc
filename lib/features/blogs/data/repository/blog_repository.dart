@@ -10,6 +10,7 @@ class BlogRepository {
 
   BlogRepository(this.api, this.authRepository);
 
+  // Fetch blogs with pagination and token refresh
   Future<PaginatedBlogsDto> getBlogs({
     required int page,
     required int limit,
@@ -23,8 +24,24 @@ class BlogRepository {
     } on ApiException catch (e) {
       if (e.statusCode == 401 && !retried) {
         await authRepository.refreshToken();
-
         return getBlogs(page: page, limit: limit, retried: true);
+      }
+      rethrow;
+    }
+  }
+
+  // Create blog with title, content, and optional image
+  Future<void> createBlog(CreateBlogDto dto, {bool retried = false}) async {
+    try {
+      final token = authRepository.accessToken;
+      if (token == null) throw ApiException('Not authenticated', 401);
+
+      await api.createBlog(dto: dto, accessToken: token);
+    } on ApiException catch (e) {
+      // If token expired, refresh and retry once
+      if (e.statusCode == 401 && !retried) {
+        await authRepository.refreshToken();
+        return createBlog(dto, retried: true);
       }
       rethrow;
     }

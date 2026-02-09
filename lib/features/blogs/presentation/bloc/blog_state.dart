@@ -46,3 +46,10 @@ class BlogError extends BlogState {
   @override
   List<Object?> get props => [message];
 }
+
+// Creating Blog
+class BLogCreating extends BlogState {}
+
+class BlogSuccessFullyCreated extends BlogState {
+  final String message = "Blog Created Successfully!";
+}

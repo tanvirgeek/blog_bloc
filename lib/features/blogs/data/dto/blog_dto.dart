@@ -1,4 +1,6 @@
 // features/blog/data/dto/blog_dto.dart
+import 'dart:io';
+
 class BlogDto {
   final String id;
   final String title;
@@ -52,4 +54,23 @@ class PaginatedBlogsDto {
       blogs: (json['blogs'] as List).map((e) => BlogDto.fromJson(e)).toList(),
     );
   }
+}
+
+
+class CreateBlogDto {
+  final String title;
+  final String content;
+  final File? image;
+
+  CreateBlogDto({
+    required this.title,
+    required this.content,
+    this.image,
+  });
+
+  // For API call, we'll handle multipart in the repository, so we don't convert image to JSON here
+  Map<String, dynamic> toJson() => {
+        'title': title,
+        'content': content,
+      };
 }
