@@ -27,3 +27,9 @@ class CreateBlog extends BlogEvent {
   @override
   List<Object?> get props => [dto];
 }
+
+class BlogTPressed extends BlogEvent {}
+
+class BlogHelloPressed extends BlogEvent {}
+
+class BlogNormalPressed extends BlogEvent {}

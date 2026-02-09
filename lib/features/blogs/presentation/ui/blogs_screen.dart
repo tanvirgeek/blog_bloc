@@ -34,6 +34,15 @@ class _BlogsScreenState extends State<BlogsScreen> {
         _page++;
         context.read<BlogBloc>().add(FetchBlogs(page: _page, limit: _limit));
       }
+
+      if (state is BlogLoadedAfterNormalPressed &&
+          state.hasMore &&
+          !_isFetching) {
+        _page = 0;
+        _isFetching = true;
+        _page++;
+        context.read<BlogBloc>().add(FetchBlogs(page: _page, limit: _limit));
+      }
     }
   }
 
@@ -58,6 +67,25 @@ class _BlogsScreenState extends State<BlogsScreen> {
       appBar: AppBar(
         title: const Text('Blogs'),
         actions: [
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert),
+            onSelected: (value) {
+              switch (value) {
+                case "Hello":
+                  context.read<BlogBloc>().add(BlogHelloPressed());
+                case "T":
+                  context.read<BlogBloc>().add(BlogTPressed());
+                case "Normal":
+                  context.read<BlogBloc>().add(BlogNormalPressed());
+              }
+            },
+            itemBuilder: (context) => const [
+              PopupMenuItem(value: "Hello", child: Text("Hello")),
+              PopupMenuItem(value: "T", child: Text("T")),
+              PopupMenuItem(value: "Normal", child: Text("Normal")),
+            ],
+          ),
+
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: _openCreateBlogModal,
@@ -75,9 +103,9 @@ class _BlogsScreenState extends State<BlogsScreen> {
           }
 
           if (state is BlogSuccessFullyCreated) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Blog created successfully')),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
             // Refresh blogs
             _page = 1;
             context.read<BlogBloc>().add(
@@ -93,6 +121,10 @@ class _BlogsScreenState extends State<BlogsScreen> {
             blogs = state.oldBlogs;
             isLoadingMore = true;
           } else if (state is BlogLoaded) {
+            blogs = state.blogs;
+          }
+
+          if (state is BlogLoadedAfterNormalPressed) {
             blogs = state.blogs;
           }
 

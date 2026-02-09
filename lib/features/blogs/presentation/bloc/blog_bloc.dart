@@ -11,6 +11,9 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
   BlogBloc(this.repository) : super(BlogInitial()) {
     on<FetchBlogs>(_onFetchBlogs);
     on<CreateBlog>(_onCreateBlog);
+    on<BlogTPressed>(_onAddT);
+    on<BlogHelloPressed>(_onAddHello);
+    on<BlogNormalPressed>(_onNormalPressed);
   }
 
   Future<void> _onFetchBlogs(FetchBlogs event, Emitter<BlogState> emit) async {
@@ -48,6 +51,70 @@ class BlogBloc extends Bloc<BlogEvent, BlogState> {
       await repository.createBlog(event.dto);
 
       emit(BlogSuccessFullyCreated()); // Success state
+    } on ApiException catch (e) {
+      emit(BlogError(e.message));
+    } catch (_) {
+      emit(const BlogError('Something went wrong'));
+    }
+  }
+
+  Future<void> _onAddT(BlogTPressed event, Emitter<BlogState> emit) async {
+    final currentState = state;
+
+    if (currentState is BlogLoaded) {
+      final updatedBlogs = currentState.blogs
+          .map((b) => b.copyWith(title: '${b.title} T'))
+          .toList();
+
+      emit(
+        BlogLoaded(
+          blogs: updatedBlogs,
+          page: currentState.page,
+          totalPages: currentState.totalPages,
+        ),
+      );
+    }
+  }
+
+  Future<void> _onAddHello(
+    BlogHelloPressed event,
+    Emitter<BlogState> emit,
+  ) async {
+    final currentState = state;
+
+    if (currentState is BlogLoaded) {
+      final updatedBlogs = currentState.blogs
+          .map((b) => b.copyWith(title: '${b.title} Hello'))
+          .toList();
+
+      emit(
+        BlogLoaded(
+          blogs: updatedBlogs,
+          page: currentState.page,
+          totalPages: currentState.totalPages,
+        ),
+      );
+    }
+  }
+
+  Future<void> _onNormalPressed(
+    BlogNormalPressed event,
+    Emitter<BlogState> emit,
+  ) async {
+    emit(BlogLoading([], isFirstFetch: true));
+
+    try {
+      final result = await repository.getBlogs(page: 1, limit: 10);
+
+      final blogs = result.blogs;
+
+      emit(
+        BlogLoadedAfterNormalPressed(
+          blogs: blogs,
+          page: result.page,
+          totalPages: result.pages,
+        ),
+      );
     } on ApiException catch (e) {
       emit(BlogError(e.message));
     } catch (_) {

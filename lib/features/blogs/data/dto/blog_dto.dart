@@ -33,6 +33,26 @@ class BlogDto {
       updatedAt: DateTime.parse(json['updatedAt']),
     );
   }
+
+  BlogDto copyWith({
+    String? id,
+    String? title,
+    String? content,
+    String? imageUrl,
+    String? author,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return BlogDto(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      content: content ?? this.content,
+      imageUrl: imageUrl ?? this.imageUrl,
+      author: author ?? this.author,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 }
 
 class PaginatedBlogsDto {

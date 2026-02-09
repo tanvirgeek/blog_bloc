@@ -53,3 +53,20 @@ class BLogCreating extends BlogState {}
 class BlogSuccessFullyCreated extends BlogState {
   final String message = "Blog Created Successfully!";
 }
+
+class BlogLoadedAfterNormalPressed extends BlogState {
+  final List<BlogDto> blogs;
+  final int page;
+  final int totalPages;
+
+  const BlogLoadedAfterNormalPressed({
+    required this.blogs,
+    required this.page,
+    required this.totalPages,
+  });
+
+  bool get hasMore => page < totalPages;
+
+  @override
+  List<Object?> get props => [blogs, page, totalPages];
+}
