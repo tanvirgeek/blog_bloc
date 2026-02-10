@@ -1,4 +1,4 @@
-import 'package:blog_bloc/core/network/auth_http_client.dart';
+import 'package:blog_bloc/core/network/app_http_client.dart';
 import 'package:blog_bloc/features/auth/data/repository/auth_repository_singleton.dart';
 import 'package:blog_bloc/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:blog_bloc/features/auth/presentation/bloc/auth_event.dart';
@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthAuthenticated) {
-          final authHttpClient = AuthHttpClient();
+          final authHttpClient = AppHttpClient();
           final blogAPI = BlogApi(authHttpClient);
           final blogRepo = BlogRepository(
             blogAPI,

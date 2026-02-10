@@ -4,10 +4,10 @@ import '../dto/login_request_dto.dart';
 import '../dto/register_request_dto.dart';
 import '../dto/token_response_dto.dart';
 import '../dto/api_exception.dart';
-import 'package:blog_bloc/core/network/auth_http_client.dart';
+import 'package:blog_bloc/core/network/app_http_client.dart';
 
 class AuthApi {
-  final AuthHttpClient client;
+  final AppHttpClient client;
 
   AuthApi(this.client);
 

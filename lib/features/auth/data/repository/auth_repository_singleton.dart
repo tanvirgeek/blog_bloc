@@ -1,7 +1,7 @@
 // features/auth/data/repository/auth_repository_singleton.dart
 import 'auth_repository.dart';
 import '../api/auth_api.dart';
-import 'package:blog_bloc/core/network/auth_http_client.dart';
+import 'package:blog_bloc/core/network/app_http_client.dart';
 import 'package:blog_bloc/core/network/token_storage.dart';
 
 class AuthRepositorySingleton {
@@ -13,7 +13,7 @@ class AuthRepositorySingleton {
   factory AuthRepositorySingleton() => _instance;
 
   AuthRepositorySingleton._internal() {
-    final authHttpClient = AuthHttpClient();
+    final authHttpClient = AppHttpClient();
     final authApi = AuthApi(authHttpClient);
     final tokenStorage = TokenStorage();
     repository = AuthRepository(authApi, tokenStorage);

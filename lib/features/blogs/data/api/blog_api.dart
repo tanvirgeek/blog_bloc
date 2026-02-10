@@ -1,10 +1,10 @@
 // features/blogs/data/api/blog_api.dart
-import 'package:blog_bloc/core/network/auth_http_client.dart';
+import 'package:blog_bloc/core/network/app_http_client.dart';
 import 'package:blog_bloc/features/auth/data/dto/api_exception.dart';
 import '../dto/blog_dto.dart';
 
 class BlogApi {
-  final AuthHttpClient client;
+  final AppHttpClient client;
 
   BlogApi(this.client);
 
